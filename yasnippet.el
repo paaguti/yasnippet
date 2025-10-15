@@ -993,7 +993,8 @@ Honour `yas-dont-activate-functions', which see."
   (append '(("^#.*$" (0 'font-lock-comment-face)))
           (with-temp-buffer
             (let ((prog-mode-hook nil)
-                  (emacs-lisp-mode-hook nil))
+                  (emacs-lisp-mode-hook nil)
+                  (elisp-fontify-semantically nil))
               (ignore-errors (emacs-lisp-mode)))
             (font-lock-set-defaults)
             (if (eq t (car-safe font-lock-keywords))
