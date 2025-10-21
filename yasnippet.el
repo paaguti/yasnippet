@@ -649,20 +649,34 @@ This can be used as a key definition in keymaps to bind a key to
 `yas-expand' only when there is a snippet available to be
 expanded.")
 
-(defvar yas-minor-mode-map
-  (let ((map (make-sparse-keymap)))
-    ;; Modes should always bind to TAB instead of `tab', so as not to override
-    ;; bindings that should take higher precedence but which bind to `TAB`
-    ;; instead (relying on `function-key-map` to remap `tab` to TAB).
-    ;; If this causes problem because of another package that binds to `tab`,
-    ;; complain to that other package!
-    ;;(define-key map [tab]     yas-maybe-expand)
-    (define-key map (kbd "TAB") yas-maybe-expand)
-    (define-key map "\C-c&\C-s" #'yas-insert-snippet)
-    (define-key map "\C-c&\C-n" #'yas-new-snippet)
-    (define-key map "\C-c&\C-v" #'yas-visit-snippet-file)
-    map)
-  "The keymap used when `yas-minor-mode' is active.")
+(defvar-keymap yas-minor-mode-edit-map
+  :prefix t
+  :doc "Nested keymap for `yas-minor-mode-map'"
+  "C-g"  #'keyboard-quit
+  "C-s"  #'yas-insert-snippet
+  "C-n"  #'yas-new-snippet
+  "C-v"  #'yas-visit-snippet-file)
+
+(defvar-keymap yas-minor-mode-map
+  :prefix t
+  :doc "The keymap used when `yas-minor-mode' is active."
+  "TAB"    #'yas-maybe-expand
+  "C-c &"  #'yas-minor-mode-edit-map)
+
+;; (defvar yas-minor-mode-map
+;;   (let ((map (make-sparse-keymap)))
+;;     ;; Modes should always bind to TAB instead of `tab', so as not to override
+;;     ;; bindings that should take higher precedence but which bind to `TAB`
+;;     ;; instead (relying on `function-key-map` to remap `tab` to TAB).
+;;     ;; If this causes problem because of another package that binds to `tab`,
+;;     ;; complain to that other package!
+;;     ;;(define-key map [tab]     yas-maybe-expand)
+;;     (define-key map (kbd "TAB") yas-maybe-expand)
+;;     (define-key map "\C-c&\C-s" #'yas-insert-snippet)
+;;     (define-key map "\C-c&\C-n" #'yas-new-snippet)
+;;     (define-key map "\C-c&\C-v" #'yas-visit-snippet-file)
+;;     map)
+;;   "The keymap used when `yas-minor-mode' is active.")
 
 (easy-menu-define yas--minor-mode-menu
       yas-minor-mode-map
@@ -5263,9 +5277,9 @@ i.e. the ones with \"yas-\" single dash prefix. I will try to
 keep them in future yasnippet versions and other elisp libraries
 can more or less safely rely upon them.")
 
-;; Workarounf for emacs master(31)
-;; It introduces semantic highlighting for emacs lisp and 
-;; that makes the new snippet edit buffer llok confusing.
+;; Workaround for emacs master(31)
+;; It introduces semantic highlighting for emacs lisp and
+;; that makes the new snippet edit buffer look confusing.
 (when (boundp elisp-fontify-semantically)
   (add-hook 'snippet-mode-hook
             #'(lambda()
