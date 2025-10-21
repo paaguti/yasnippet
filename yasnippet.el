@@ -660,7 +660,7 @@ expanded.")
 (defvar-keymap yas-minor-mode-map
   :prefix t
   :doc "The keymap used when `yas-minor-mode' is active."
-  "TAB"    #'yas-maybe-expand
+  "C-i"    yas-maybe-expand
   "C-c &"  #'yas-minor-mode-edit-map)
 
 ;; (defvar yas-minor-mode-map
